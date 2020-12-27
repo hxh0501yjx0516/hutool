@@ -1,5 +1,9 @@
 package cn.hutool.core.utillearn;
 
+import cn.hutool.core.util.ObjectUtil;
+import org.apache.commons.math3.optim.univariate.BrentOptimizer;
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 public class PrimitiveArrayUtilLearn {
     public static boolean isEmpty(int[] array) {
         return array == null || array.length == 0;
@@ -164,6 +168,14 @@ public class PrimitiveArrayUtilLearn {
     }
 
     //-------------------------------------------------------------------range
+    public static int[] range(int excludeEnd) {
+        return range(0, excludeEnd, 1);
+    }
+
+    public static int[] range(int includeStart, int excludeEnd) {
+        return range(includeStart, excludeEnd, 1);
+    }
+
     public static int[] range(int includeStart, int excludeEnd, int step) {
         if (includeStart > excludeEnd) {
             int emp = includeStart;
@@ -176,9 +188,65 @@ public class PrimitiveArrayUtilLearn {
         int length = deviation / step;
         if (deviation % step != 0)
             length += 1;
-         return new int[1];
+        int[] range = new int[length];
+        for (int i = 0; i < length; i++) {
+            range[i] = includeStart;
+            includeStart += step;
+        }
+        return range;
+    }
+// ----------------------------------------------------------------------split
+
+
+    public static int indexOf(long[] array, long value) {
+        if (null != array) {
+            for (int i = 0; i < array.length; i++) {
+                if (value == array[i]) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
+    public static boolean contains(long[] array, long value) {
+        return indexOf(array, value) > -1;
+    }
 
+    public static Integer[] wrap(int... values) {
+        if (null == values) {
+            return null;
+        }
+        final int length = values.length;
+        if (0 == length) {
+            return new Integer[0];
+        }
+        final Integer[] result = new Integer[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = values[i];
+        }
+        return result;
+    }
 
+    public static int[] unWrap(Integer... values) {
+        if (null == values) {
+            return null;
+        }
+        final int length = values.length;
+        if (0 == length) {
+            return new int[0];
+        }
+        final int[] result = new int[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = ObjectUtil.defaultIfNull(values[i], 0);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] initNum = {1, 2, 3};
+        Integer[] result = wrap(null);
+        System.err.println(result.length);
+
+    }
 }
